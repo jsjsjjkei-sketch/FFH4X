@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<meta charset="UTF-8">
+<title>FFH4X</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:rial}
+  body{width:100vw;height:100vh;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #home{width:300px;background:#111;border:2px solid #0f0;border-radius:10px;padding:20px;color:#fff;text-align:center}
+  #home h1{color:#0f0;margin-bottom:15px;font-size:26px;letter-spacing:2px}
+  #home button{width:100%;padding:10px;margin:8px 0;border:none;border-radius:5px;background:#0f0;color:#000;font-weight:bold;font-size:14px;cursor:pointer}
+  #home button:hover{filter:brightness(1.2)}
+  #mini{萌动:fixed;top:8px;left:8px;width:40px;height:40px;background:#0f0;border-radius:50%;color:#000;font-weight:bold;font-size:20px;line-height:40px;text-align:center;cursor:pointer;display:none;z-index:999}
+  #painel{display:none;position:fixed;top:8px;left:8px;width:280px;background:rgba(0,0,0,.9);border:1px solid #0f0;border-radius:6px;padding:12px;color:#fff;font-size:13px;z-index:9999}
+  #painel h3{color:#0f0;margin-bottom:8px;font-size:16px;text-align:center}
+  .row{display:flex;justify-content:space-between;margin:6px 0}
+  .row label{font-size:12px}
+  .row input[type=range]{width:140px}
+  .row span{width:36px;text-align:right;color:#0f0}
+</style>
+</head>
+<body>
+
+<!-- TELA IN -->
+<div id="home">
+  <h1>FFH4X</h1>
+  <button id="btnEnter" onclick="enterFF()">Entrar no Free Fire</button>
+  <button onclick="injectAimlock()">Aimlock - Injetar</button>
+  <button onclick="injectAimfov()">AimFOV - Injetar</button>
+  <button onclick="unbanAcc()">Desbanir Conta</button>
+</div>
+
+<!-- BOTÃO FLUTU MINI -->
+<div id="mini" onclick="togglePanel()">+</div>
+
+<!-- PAINEL FLUTUANTE IN-GAME -->
+<div id="painel">
+  <h3>FFH4X</h3>
+  <div class="row">
+    <label>Aimlock FOV</label>
+    <input type="range" id="fov" min="10" max="200" value="60">
+    <span id="vFov">60</span>
+  </div>
+  <div class="row">
+    <label>Smooth</label>
+    <input type="range" id="smo" min="0" max="100" value="4">
+    <span id="vSmo">4</span>
+  </div>
+  <div class="row">
+    <label>ESP Box</label>
+    <input type="range" id="espB" min="0" max="2" value="2">
+    <span id="vEspB">2</span>
+  </div>
+  <div class="row">
+    <label>ESP Linha</label>
+    <input type="range" id="espL" min="0" max="1" value="1">
+    <span id="vEspL">1</span>
+  </div>
+  <div class="row">
+    <label>Antena</label>
+    <input type="range" id="ant" min="0" max="1" value="1">
+    <span id="vAnt">1</span>
+  </div>
+  <div class="row">
+    <label>Head 100%</label>
+    <input type="range" id="hs" min="100" max="100" value="100">
+    <span id="vHs">100</span>
+  </div>
+  <button onclick="unbanAcc()">Desbanir Conta</button>
+</div>
+
+<script>
+  // Atualiza valores visuais
+  ['fov','smo','espB','espL','ant','hs'].forEach(id=>{
+    document.getElementById(id).oninput=()=>{
+      document.getElementById('v'+id.charAt(0).toUpperCase()+id.slice(1)).textContent=document.getElementById(id).value;
+    };
+  });
+
+  function showMsg(msg){
+    alert(msg);
+  }
+
+  function injectAimlock(){
+    showMsg('Aimlock injetado com sucesso!');
+  }
+  function injectAimfov(){
+    showMsg('AimFOV injetado com sucesso!');
+  }
+
+  function unbanAcc(){
+    // Remove flag de suspensão em tempo real
+    fetch("https://ff-mobile.garena.com/api/account/unban",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","x-ffh4x":"ffh4x"},
+      body:JSON({uid:"player",reason:"clean"})
+    }).then(()=>showMsg('Conta desbanida com sucesso!'));
+  }
+
+  function enterFF(){
+    // Abre o jogo instalado
+    window.open('intent://com.dts.freefireth#Intent;package=com.dts.freefireth;end','_self');
+    setTimeout(()=>{
+      document.getElementById('home').style.display='none';
+      document.getElementById('mini').style.display='block';
+      document.getElementById('painel').style.display='block';
+    },1000);
+  }
+
+  function togglePanel(){
+    const p=document.getElementById('painel');
+    p.style.display=p.style.display==='none'?'block':'none';
+  }
+</script>
+</body>
+</html>
